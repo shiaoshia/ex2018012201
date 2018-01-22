@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    //需將res裡的資料庫傳到File資料夾裡才可以使用
     public void click01(View v) {
         File dbFile = new File(getFilesDir(),"student.db");
         InputStream is = getResources().openRawResource(R.raw.student);
@@ -47,6 +48,34 @@ public class MainActivity extends AppCompatActivity {
         c.moveToFirst();    //將指標移至第一筆資料
         Log.d("DB",c.getString(1) + "," + c.getInt(2));
         c.moveToNext();     //將指標移至下一筆資料
+        Log.d("DB",c.getString(1) + "," + c.getInt(2));
+    }
+
+    //各種select的用法
+    public void click03(View v) {
+        File dbFile = new File(getFilesDir(),"student.db");
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(),null,SQLiteDatabase.OPEN_READWRITE);
+        String strSql = "Select * from students where _id=?";
+        Cursor c = db.rawQuery(strSql,new String[] {"2"});  //Select id=2的資料
+        c.moveToFirst();
+        Log.d("DB",c.getString(1) + "," + c.getInt(2));
+    }
+
+    //各種select的用法
+    public void click04(View v) {
+        File dbFile = new File(getFilesDir(),"student.db");
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(),null,SQLiteDatabase.OPEN_READWRITE);
+        Cursor c = db.query("students",new String[]{"_id","name","score"},null,null,null,null,null);
+        c.moveToFirst();
+        Log.d("DB",c.getString(1) + "," + c.getInt(2));
+    }
+
+    //各種select的用法
+    public void click05(View v) {
+        File dbFile = new File(getFilesDir(),"student.db");
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(),null,SQLiteDatabase.OPEN_READWRITE);
+        Cursor c = db.query("students",new String[]{"_id","name","score"},"_id=?",new String[]{"2"},null,null,null);
+        c.moveToFirst();
         Log.d("DB",c.getString(1) + "," + c.getInt(2));
     }
 }
